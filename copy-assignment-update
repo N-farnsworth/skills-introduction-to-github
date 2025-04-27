@@ -213,19 +213,24 @@ LinkedList& LinkedList::operator=(const LinkedList &object) {
 // push a node
 // HOMEWORK
 void LinkedList::push (int value) {
-    this->headptr = new node(value, nullptr); 
+    node* add = new node(value, headptr); 
+    headptr = add;
 }
 
 // pop a node
 // HOMEWORK
 int LinkedList::pop () {
-    int value_to_remove;
-    value_to_remove = this->headptr->getvalue();
+
+    if(this->headptr == nullptr){
+        return -1; 
+    }
+
+    int value_to_remove = this->headptr->getvalue();
 
     node* temp = this->headptr->getptr();
     delete this->headptr;
     this->headptr = temp; 
-    
+
     return value_to_remove;
 }
 
@@ -253,6 +258,7 @@ void LinkedList::printLinkedList () {
 // should you insert. It approximates the correct driving order for the driver.
 // HOMEWORK
 int LinkedList::find_closest_less_than(int value) {
+
     return 1; 
 }
 

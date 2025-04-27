@@ -165,8 +165,7 @@ LinkedList::LinkedList (const LinkedList& object) : headptr(nullptr){
     node* curOriginal = object.headptr->getptr(); 
 
     while(curOriginal != nullptr){
-        curCopy->setptr(curOriginal->getptr());
-        curCopy->setvalue(curOriginal->getvalue());
+        curCopy->setptr(new node(curOriginal->getvalue()));
 
         curCopy = curCopy->getptr();
         curOriginal = curOriginal->getptr();
@@ -196,13 +195,12 @@ LinkedList& LinkedList::operator=(const LinkedList &object) {
     }
 
     //  same process as copy constructor
-    headptr = new node(object.headptr->getvalue(), object.headptr->getptr());
+    headptr = new node(object.headptr->getvalue(), nullptr);
     node* curThis = headptr;
-    node* curObject = object.headptr;
+    node* curObject = object.headptr->getptr();
 
     while(curObject != nullptr){
-        curThis->setptr(curObject->getptr());
-        curThis->setvalue(curObject->getvalue());
+        curThis->setptr(new node(curObject->getvalue(), nullptr));
 
         curThis = curThis->getptr();
         curObject = curObject->getptr();
@@ -222,6 +220,12 @@ void LinkedList::push (int value) {
 // HOMEWORK
 int LinkedList::pop () {
     int value_to_remove;
+    value_to_remove = this->headptr->getvalue();
+
+    node* temp = this->headptr->getptr();
+    delete this->headptr;
+    this->headptr = temp; 
+    
     return value_to_remove;
 }
 
@@ -249,6 +253,7 @@ void LinkedList::printLinkedList () {
 // should you insert. It approximates the correct driving order for the driver.
 // HOMEWORK
 int LinkedList::find_closest_less_than(int value) {
+    return 1; 
 }
 
 // inserts a node in a sepcific location

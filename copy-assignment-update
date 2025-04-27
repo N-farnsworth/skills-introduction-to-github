@@ -258,8 +258,26 @@ void LinkedList::printLinkedList () {
 // should you insert. It approximates the correct driving order for the driver.
 // HOMEWORK
 int LinkedList::find_closest_less_than(int value) {
+    node* current = this->headptr; 
+    node* saved = nullptr;
+    int howClose = std::numeric_limits<int>::max(); 
 
-    return 1; 
+    while(current != nullptr){
+        if(current->getvalue() < value){
+            if(std::abs(current->getvalue() - value) < howClose){
+                saved = current;
+                howClose = std::abs(current->getvalue() - value);
+            }
+        }
+        current = current->getptr();
+    }
+
+    if(saved != nullptr){
+        return saved->getvalue();
+    }
+    else{
+        return -1; 
+    } 
 }
 
 // inserts a node in a sepcific location

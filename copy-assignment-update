@@ -226,6 +226,7 @@ void LinkedList::push (int value) {
 int LinkedList::pop () {
 
     if(this->link_list_empty()){
+        std::cout << "Cannot remove elements from empty link list" << std::endl; 
         return -1; 
     }
 
@@ -263,38 +264,42 @@ void LinkedList::printLinkedList () {
 // HOMEWORK
 int LinkedList::find_closest_less_than(int value) {
     node* current = this->headptr; 
-    node* saved = nullptr;
-    int howClose = std::numeric_limits<int>::max(); 
+    int howClose = 0; 
 
     while(current != nullptr){
-        if(current->getvalue() < value){
-            if(std::abs(current->getvalue() - value) < howClose){
-                saved = current;
-                howClose = std::abs(current->getvalue() - value);
-            }
+        if(current->getvalue() < value && current->getvalue() > howClose){
+            howClose = current->getvalue();
+            
         }
         current = current->getptr();
     }
-
-    if(saved != nullptr){
-        return saved->getvalue();
-    }
-    else{
-        return -1;
-    } 
+    return howClose; 
 }
 
 // inserts a node in a sepcific location
 // HOMEWORK
 void LinkedList::insertNode(int value, int reference_value) {
     
+    if(this->link_list_empty()){
+        push(value);
+        return; 
+    }
+
+    if(this->headptr->getvalue() == reference_value){
+        if(value < reference_value){
+            push(value); 
+            return; 
+        }
+    }
+
     node* current = this->headptr;
-    node* n = new node(value, nullptr); 
     while(current != nullptr){
         if(current->getvalue() == reference_value){
+            node* n = new node(value, nullptr); 
             node* temp = current->getptr();
             current->setptr(n);
             n->setptr(temp); 
+            return; 
         }
         current = current->getptr(); 
     }
@@ -308,19 +313,32 @@ void LinkedList::deleteNode(int reference_value) {
     if(this->link_list_empty()){
         return;
     }
+    if(this->headptr->getvalue() == reference_value){
+        node* temp = this->headptr;
+        this->headptr = this->headptr->getptr();
+        delete temp;
+        return; 
+    }
+    
     node* current = this->headptr;
     node* curPtr = current->getptr(); 
+
 
     while(curPtr != nullptr){
         if(curPtr->getvalue() == reference_value){
             node* temp = curPtr->getptr();
             delete curPtr;
             current->setptr(temp); 
+            return;
         }
 
         current = current->getptr();
-        curPtr = current->getptr();
+        if(current != nullptr){
+            curPtr = current->getptr();
+        }
     }
+
+    std::cout << "Trying to delete a node that does not exist" << std::endl;
 
 } // end deleteNode
 

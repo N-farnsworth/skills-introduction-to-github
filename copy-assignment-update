@@ -189,20 +189,24 @@ LinkedList& LinkedList::operator=(const LinkedList &object) {
         current = next;
     }
     this->headptr = nullptr; 
-    if(object.headptr == nullptr){
-        return *this;
-    //  now that old data is empty, quick check if object is empty
-    }
+
 
     //  same process as copy constructor
-    headptr = new node(object.headptr->getvalue(), nullptr);
     node* curThis = headptr;
-    node* curObject = object.headptr->getptr();
+    node* curObject = object.headptr;
 
     while(curObject != nullptr){
-        curThis->setptr(new node(curObject->getvalue(), nullptr));
 
-        curThis = curThis->getptr();
+        node* newNode = new node(curObject->getvalue(), nullptr);
+        if(curThis == nullptr){
+            this->headptr = newNode; 
+            curThis = this->headptr;
+        }
+        else{
+            curThis->setptr(newNode);
+            curThis = curThis->getptr(); 
+        }
+        
         curObject = curObject->getptr();
     }
 
@@ -221,7 +225,7 @@ void LinkedList::push (int value) {
 // HOMEWORK
 int LinkedList::pop () {
 
-    if(this->headptr == nullptr){
+    if(this->link_list_empty()){
         return -1; 
     }
 
@@ -276,18 +280,48 @@ int LinkedList::find_closest_less_than(int value) {
         return saved->getvalue();
     }
     else{
-        return -1; 
+        return -1;
     } 
 }
 
 // inserts a node in a sepcific location
 // HOMEWORK
 void LinkedList::insertNode(int value, int reference_value) {
+    
+    node* current = this->headptr;
+    node* n = new node(value, nullptr); 
+    while(current != nullptr){
+        if(current->getvalue() == reference_value){
+            node* temp = current->getptr();
+            current->setptr(n);
+            n->setptr(temp); 
+        }
+        current = current->getptr(); 
+    }
+
+
 } // end insertNode
 
 // deletes a node in a specific location
 // HOMEWORK
 void LinkedList::deleteNode(int reference_value) {
+    if(this->link_list_empty()){
+        return;
+    }
+    node* current = this->headptr;
+    node* curPtr = current->getptr(); 
+
+    while(curPtr != nullptr){
+        if(curPtr->getvalue() == reference_value){
+            node* temp = curPtr->getptr();
+            delete curPtr;
+            current->setptr(temp); 
+        }
+
+        current = current->getptr();
+        curPtr = current->getptr();
+    }
+
 } // end deleteNode
 
 // helper function: Is the link list empty?
